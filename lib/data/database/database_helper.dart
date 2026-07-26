@@ -2,7 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/hashtag.dart';
-
+import '../models/photo_tag.dart';
 /// Everything here is 100% local — there is no network layer anywhere in
 /// this app. Only hashtags and the (photoAssetId <-> hashtagId) relation
 /// are stored; the original photo/video files are never touched, copied,
