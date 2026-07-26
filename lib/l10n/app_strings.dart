@@ -93,6 +93,8 @@ class AppStrings {
     // Bulk select
     'selectedCount': {'en': 'selected', 'ar': 'محدد'},
     'selectAll': {'en': 'Select all', 'ar': 'تحديد الكل'},
+    'sortNewestFirst': {'en': 'Newest first', 'ar': 'الأحدث أولاً'},
+    'sortOldestFirst': {'en': 'Oldest first', 'ar': 'الأقدم أولاً'},
     'cancelSelection': {'en': 'Cancel', 'ar': 'إلغاء التحديد'},
     'bulkSelectHint': {'en': 'Tap photos to select them', 'ar': 'اضغط على الصور عشان تحددها'},
 
