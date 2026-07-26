@@ -1,0 +1,97 @@
+# ============================================================================
+# Codemagic CI/CD config — Hash Gallery
+# ============================================================================
+# فيه Workflow لأندرويد (يشتغل فورًا من غير أي إعداد إضافي) وWorkflow لـ iOS
+# (يحتاج منك تربط حساب Apple Developer وتفعّل الـ Code Signing من إعدادات
+# Codemagic قبل ما يشتغل — التفاصيل موجودة في README.md).
+# ============================================================================
+
+workflows:
+
+  android-workflow:
+    name: Hash Gallery - Android
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+      vars:
+        PACKAGE_NAME: "com.hashgallery.hash_gallery"
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+    scripts:
+      - name: تجهيز/إصلاح مجلد android لو ناقص
+        script: |
+          flutter create . --platforms=android --org com.hashgallery
+      - name: تحميل مكتبات Flutter
+        script: |
+          flutter pub get
+      - name: فحص سريع للكود (لا يوقف البيلد لو فيه تحذيرات بسيطة)
+        script: |
+          flutter analyze || true
+      - name: بناء APK (نسخة Release)
+        script: |
+          flutter build apk --release
+      - name: بناء App Bundle (لو هتنشر على Google Play)
+        script: |
+          flutter build appbundle --release
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+      - build/app/outputs/bundle/release/*.aab
+      - build/app/outputs/**/mapping.txt
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com   # عدّل الإيميل ده عشان تستلم رابط النسخة أول ما تخلص
+        notify:
+          success: true
+          failure: true
+
+  ios-workflow:
+    name: Hash Gallery - iOS
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.hashgallery.hash_gallery
+      vars:
+        BUNDLE_ID: "com.hashgallery.hash_gallery"
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+    scripts:
+      - name: تجهيز/إصلاح مجلد ios لو ناقص
+        script: |
+          flutter create . --platforms=ios --org com.hashgallery
+      - name: تحميل مكتبات Flutter
+        script: |
+          flutter pub get
+      - name: تجهيز شهادات التوقيع (لازم تكون مربوط حساب Apple Developer في Codemagic)
+        script: |
+          xcode-project use-profiles
+      - name: تحميل مكتبات CocoaPods
+        script: |
+          find . -name "Podfile" -maxdepth 2 -execdir pod install \;
+      - name: بناء IPA (نسخة Release)
+        script: |
+          flutter build ipa --release --export-options-plist=$HOME/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/ios/archive/Runner.xcarchive
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
+        notify:
+          success: true
+          failure: true

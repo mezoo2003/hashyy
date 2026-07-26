@@ -1,0 +1,50 @@
+name: hash_gallery
+description: "Hash Gallery — smart photo & video gallery organized by hashtags instead of albums."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # State management
+  provider: ^6.1.2
+
+  # Local database (Hashtags + PhotoTag relations)
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+  path_provider: ^2.1.4
+
+  # Device photo/video library access (no copying of files)
+  photo_manager: ^3.6.1
+  photo_manager_image_provider: ^2.2.0
+
+  # Video playback in the photo/video detail viewer
+  video_player: ^2.9.2
+
+  # Biometric / PIN protection for locked hashtags
+  local_auth: ^2.3.0
+
+  # Settings persistence (theme, language, PIN hash)
+  shared_preferences: ^2.3.3
+
+  # Password hashing for locked hashtags PIN
+  crypto: ^3.0.5
+
+  # Localization support (RTL for Arabic)
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
